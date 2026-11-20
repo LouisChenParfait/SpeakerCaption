@@ -1,0 +1,4 @@
+# Minimal install: diarization only (--asr none), ~35 MB of models, CPU only.
+numpy>=1.24,<2
+soundfile>=0.12
+sherpa-onnx>=1.10.28

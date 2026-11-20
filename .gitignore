@@ -1,0 +1,64 @@
+# Local virtual environment (keep dependencies in this folder, not in git)
+.venv/
+venv/
+
+# Downloaded model weights -- NEVER commit third-party weights
+# models/ 整个目录都被排除：里面是 pyannote / CAM++ / VAD / Paraformer /
+# Whisper 权重，全部来自上游官方 release，体积大且各有自己的许可条款。
+# 想分享给同事时，请**单独打包 models/ 目录**（不走 git），或让对方自己跑
+#   python scripts/download_models.py --with-live --with-whisper large-v3
+models/
+*.onnx
+*.tar.bz2
+*.bin
+models/whisper/**/.cache/
+
+# Test audio downloaded from upstream release (not redistributed)
+tests/data/*.wav
+tests/data/*.mp3
+
+# Run outputs (recreated on each run)
+out/
+live_out/
+*.srt
+*.rttm
+
+# Python / editor / OS cruft
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Scratch / diagnostics
+_diag.py
+_tmp/
+*.part
+*.log
+
+# GUI user preferences (machine-specific; do not ship)
+settings.json
+
+# Local UI / option verification artifacts
+ui_check.png
+ui_check.log
+tmp_*/
+
+# Front-end visual prototype: not a runtime dependency (~200 node_modules files).
+# Brand source drafts at repo root are also unreferenced; runtime SVGs live in
+# src/speakercaption/assets/brand/ -- leading slash keeps that directory tracked.
+/app/
+/assets/
+/_shot.py
+/NVIDIA Corporation/
+
+# docs: superseded concept art, older UI screenshots and brand source drafts.
+# None of these are referenced by README / UI_DESIGN / DEVLOG.
+docs/SAMPLE.png
+docs/shots/
+docs/vEnglish.svg
+docs/vLOGO.svg
+docs/vWORDs.svg

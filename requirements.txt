@@ -1,0 +1,25 @@
+# SpeakerCaption - full dependency set (Python 3.9 - 3.13)
+# Install:  pip install -r requirements.txt
+#
+# Core diarization stack (CPU only, no CUDA required)
+numpy>=1.24,<2
+soundfile>=0.12
+sherpa-onnx>=1.10.28
+
+# Optional ASR backends
+faster-whisper>=1.0.0        # --asr whisper (default)
+httpx>=0.24                  # --asr confucius (HTTP client only)
+
+# Optional quality / convenience
+soxr>=0.3.0                  # higher-quality resampling for 44.1k/48k input
+opencc-python-reimplemented>=0.1.7   # --script simplified|traditional (default simplified)
+
+# Real-time listener (live.py) -- system audio capture
+# pyaudiowpatch ships Windows wheels only; the environment marker keeps
+# `pip install -r requirements.txt` working on macOS / Linux.
+pyaudiowpatch>=0.2.12.9; sys_platform == "win32"
+sounddevice>=0.5.1           # macOS (BlackHole) / Linux (PulseAudio monitor)
+
+# New "obsidian x flame" Qt interface for live.py; if missing, the GUI
+# automatically falls back to the legacy Tkinter interface.
+PySide6>=6.5
