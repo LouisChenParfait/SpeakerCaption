@@ -107,8 +107,22 @@ python diarize.py --help
 python live.py --help
 ```
 
-On Windows, once `.venv` is ready you can use the launchers instead:
-`run.bat <audio> [args]` or `run_live.bat [args]`.
+On Windows, once `.venv` is ready there are two launchers. They are **two parallel entry
+points**, not a main program and a legacy one:
+
+| Launcher | Calls | When to use it |
+|---|---|---|
+| `run_live.bat` | `live.py` -> GUI window | **Start here for everyday use**: live system-audio captioning / transcribe file. Double-click, no arguments needed |
+| `run_diarize.bat` | `diarize.py` -> CLI | Full offline transcription of an existing audio/video file: batch jobs, unattended runs, or when you need every offline option |
+
+`run_diarize.bat <audio> [args]` is equivalent to `python diarize.py <audio> [args]`, e.g.
+`run_diarize.bat podcast.wav --num-speakers 2 --language zh`. **Double-clicking it with no
+arguments only prints usage and exits** — use `run_live.bat` for the GUI.
+
+> The GUI's "Transcribe file" mode shares the same offline pipeline but exposes fewer options
+> and needs a manual Start. The CLI exposes all of them (`--threshold`, `--merge-gap`,
+> `--seg-int8`, `--formats`, ...) and is scriptable. This launcher used to be called
+> `run.bat`; it was renamed because the name suggested it was the main entry point.
 
 > If downloads are slow or pip returns 403, try another PyPI mirror, e.g.
 > `pip install -r requirements.txt -i https://mirrors.cloud.tencent.com/pypi/simple`.

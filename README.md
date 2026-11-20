@@ -97,8 +97,20 @@ python diarize.py --help
 python live.py --help
 ```
 
-Windows 上建好 `.venv` 后可以直接用启动器：
-`run.bat <音频> [参数]` 或 `run_live.bat [参数]`。
+Windows 上建好 `.venv` 后有两个启动器，它们是**并列的两个入口**，不是主程序与旧版本：
+
+| 启动器 | 调用 | 什么时候用 |
+|---|---|---|
+| `run_live.bat` | `live.py` → 图形窗口 | **日常启动用这个**：实时听录系统声音 / 听录文件；双击即可，无需参数 |
+| `run_diarize.bat` | `diarize.py` → 命令行 | 把已有音视频文件整段转成文稿：批处理、无人值守、需要调全部离线参数 |
+
+`run_diarize.bat <音频> [参数]` 等价于 `python diarize.py <音频> [参数]`，例如
+`run_diarize.bat podcast.wav --num-speakers 2 --language zh`。**不带参数直接双击它
+只会打印用法后退出，不会启动程序** —— 需要图形界面请用 `run_live.bat`。
+
+> 界面里的「听录文件」模式与命令行版共用同一套离线管线，但只暴露了部分选项、且必须
+> 手动点开始；命令行版可调 `--threshold` / `--merge-gap` / `--seg-int8` / `--formats`
+> 等全部参数，适合脚本调用。这个启动器早期叫 `run.bat`，因容易被误认为主启动器，已更名。
 
 > 下载慢或 pip 报 403：可换 PyPI 镜像，例如
 > `pip install -r requirements.txt -i https://mirrors.cloud.tencent.com/pypi/simple`；

@@ -9,10 +9,12 @@ set "PYTHONIOENCODING=utf-8"
 set "PY=%~dp0.venv\Scripts\python.exe"
 if not exist "%PY%" set "PY=python"
 if "%~1"=="" (
-  echo SpeakerCaption - offline speaker diarized transcription
-  echo Usage:   run.bat ^<audio-file^> [options]
-  echo Example: run.bat podcast.wav --num-speakers 2 --language zh
-  echo Example: run.bat meeting.m4a --num-speakers 6 --asr confucius
+  echo SpeakerCaption - offline file transcription: diarize.py
+  echo This is NOT the GUI launcher. For the live window use run_live.bat.
+  echo.
+  echo Usage:   run_diarize.bat ^<audio-file^> [options]
+  echo Example: run_diarize.bat podcast.wav --num-speakers 2 --language zh
+  echo Example: run_diarize.bat meeting.m4a --num-speakers 6 --asr confucius
   echo Full options: python diarize.py --help   or see README.md
   exit /b 1
 )

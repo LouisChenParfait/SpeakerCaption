@@ -184,6 +184,9 @@ python -m venv .venv
 
 ## 11. Windows 启动器（踩坑 5：cmd 括号陷阱）
 
+> 本节保留当时的文件名 `run.bat`；该启动器后来更名为 `run_diarize.bat`（见 §27），
+> 括号陷阱的结论至今有效。
+
 `run.bat` 最初带 `--version` 调用时 exit 1、零输出；PowerShell 直接调用、
 `cmd /c`、Python `subprocess` 捕获都是同样现象。用一个最小 `_probe2.bat`
 逐行打点后定位：`if "%~1"=="" ( ... )` 括号块里有一行
@@ -1288,3 +1291,48 @@ amp = (0.18 + abs(noise)*0.82) * self._energy * sin(i/n*pi)
 - 端到端实测：测试 wav 第 1 秒近静音、第 2 秒有语音（`--duration 2.5`），
   波形帧里同时存在 `<0.01` 的平线柱和 `>0.3` 的语音柱；`有声占比 42.3%`
   与画面一致，证实数据确实来自采集而非合成。
+
+---
+
+## 27. 启动器改名：run.bat → run_diarize.bat（2026-11-20）
+
+### 27.1 用户反馈
+
+> 「如果那个 run.bat 毫无用处就删掉这个文件，毕竟 run_live.bat 也包括了它的作用。
+> 如果 run.bat 有实际意义就改一个明确用途的文件名，否则 run.bat 这个文件名非常容易
+> 被理解为最主要的启动批处理。」
+
+### 27.2 先核实「run_live.bat 是否覆盖了它」
+
+结论：**没有覆盖，不能删**。两条链路不是同一件事：
+
+| | diarize.py（run_diarize.bat） | GUI「听录文件」/ FileTranscriber |
+|---|---|---|
+| 调用形态 | 纯 CLI，无窗口，可脚本 / 无人值守 | 必须开 Qt 窗口、手动点「开始」 |
+| 参数 | cli.py 30 个，含 `--threshold` / `--merge-gap` / `--seg-int8` / `--vad-filter` / `--pad` / `--formats` / `--progress` | `live_ui.py:297` 构造时**根本没传** threshold / merge_gap / seg_int8 / vad_*，全用默认值 |
+| 输出 | `out/` | `live_out/` |
+| 文档章节 | README「典型用法」「主要参数」整章 | 「界面上的功能选项」 |
+
+所以 `run.bat` 对应的是项目两大功能之一（离线整段转写），只是**名字**误导。
+按用户给的第二条分支：改名，不删。命名选 `run_diarize.bat`，
+与 `run_live.bat` 形成 `run_<入口脚本>.bat` 对照，两个并列入口一眼可辨。
+
+### 27.3 改动清单
+
+| 文件 | 改动 |
+|---|---|
+| `run.bat` → `run_diarize.bat` | `git mv` 保留历史 |
+| `run_diarize.bat` | usage / 示例里的文件名同步；无参数时新增两行提示「This is NOT the GUI launcher. For the live window use run_live.bat.」—— 双击它的人当场就能看到正确入口 |
+| `README.md` / `README.en.md` | 快速开始新增「两个启动器」对照表、双击无参数的后果、GUI 文件模式与 CLI 的能力差异、更名说明；中英保持同步 |
+| `docs/DEVLOG.md` §11 | 加注说明历史叙述保留原文件名 |
+
+**差点重犯 §11 的坑**：改 usage 时第一版想写
+`echo SpeakerCaption - offline file transcription (diarize.py)` —— 括号块里的 `)`
+会被 cmd 当成 `if (...)` 的结束，正是 §11 记的那个 bug。新加的 echo 行
+**全部不含 `(` 或 `)`**，`^<audio-file^>` 保持原有转义。
+
+### 27.4 兼容性
+
+不保留 `run.bat` 转发脚本 —— 留着就等于没消除歧义。仓库刚发布、使用者单一，
+README 两版都写明「早期叫 `run.bat`，已更名」。已 clone 旧版的人改用新名，
+或直接用 `python diarize.py` 即可。
