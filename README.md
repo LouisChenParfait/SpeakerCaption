@@ -1,5 +1,7 @@
 # SpeakerCaption
 
+**简体中文** · [English](README.en.md)
+
 **离线转写音视频 + 实时听录系统声音，两种模式都带说话人分离。**
 
 ![实时听录窗口：真实音频波形、说话人字幕与状态条](docs/ui-waveform.png)
